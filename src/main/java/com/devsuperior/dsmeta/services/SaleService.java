@@ -21,11 +21,20 @@ public class SaleService {
 	public SaleMinDTO findById(Long id) {
 		Optional<Sale> result = repository.findById(id);
 		Sale entity = result.get();
-		return new SaleMinDTO(entity);
+		return createSaleMinDTO(entity);
 	}
 
 	public Page<SaleMinDTO> searchSalesReport(LocalDate minDate, LocalDate maxDate, String name, Pageable pageable){
 		Page<Sale> entity = repository.searchSalesReport(minDate, maxDate, name, pageable);
-		return entity.map(SaleMinDTO::new);
+		return entity.map(this::createSaleMinDTO);
+	}
+
+	private SaleMinDTO createSaleMinDTO(Sale entity){
+		return SaleMinDTO.builder()
+				.id(entity.getId())
+				.amount(entity.getAmount())
+				.date(entity.getDate())
+				.name(entity.getSeller().getName())
+				.build();
 	}
 }

@@ -6,23 +6,51 @@ import com.devsuperior.dsmeta.entities.Sale;
 
 public class SaleMinDTO {
 
-	private Long id;
-	private Double amount;
-	private LocalDate date;
-	private String name;
-	
-	public SaleMinDTO(Long id, Double amount, LocalDate date, String name) {
-		this.id = id;
-		this.amount = amount;
-		this.date = date;
-		this.name = name;
+	private final Long id;
+	private final Double amount;
+	private final LocalDate date;
+	private final String name;
+
+	public SaleMinDTO(Builder builder) {
+		this.id = builder.id;
+		this.amount = builder.amount;
+		this.date = builder.date;
+		this.name = builder.name;
 	}
-	
-	public SaleMinDTO(Sale entity) {
-		id = entity.getId();
-		amount = entity.getAmount();
-		date = entity.getDate();
-		name = entity.getSeller().getName();
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		private Long id;
+		private Double amount;
+		private LocalDate date;
+		private String name;
+
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder amount(Double amount) {
+			this.amount = amount;
+			return this;
+		}
+
+		public Builder date(LocalDate date) {
+			this.date = date;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public SaleMinDTO build() {
+			return new SaleMinDTO(this);
+		}
 	}
 
 	public Long getId() {
