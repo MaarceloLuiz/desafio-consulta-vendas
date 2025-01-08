@@ -3,6 +3,7 @@ package com.devsuperior.dsmeta.services;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.devsuperior.dsmeta.projections.SaleProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,14 @@ public class SaleService {
 	public Page<SaleMinDTO> searchSalesReport(LocalDate minDate, LocalDate maxDate, String name, Pageable pageable){
 		Page<Sale> entity = repository.searchSalesReport(minDate, maxDate, name, pageable);
 		return entity.map(this::createSaleMinDTO);
+	}
+
+	public Page<SaleMinDTO> searchSalesSummary(LocalDate minDate, LocalDate maxDate, Pageable pageable){
+		Page<SaleProjection> entity = repository.searchSalesSummary(minDate, maxDate, pageable);
+		return entity.map(e -> SaleMinDTO.builder()
+										.name(e.getSellerName())
+										.amount(e.getTotalAmount())
+										.build());
 	}
 
 	private SaleMinDTO createSaleMinDTO(Sale entity){
